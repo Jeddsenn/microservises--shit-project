@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  gateway-service:
+    image: openjdk:17-jdk-slim
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./gateway-service:/app
+    working_dir: /app
+    command: ["./gradlew", "bootRun"]
+
+  user-service:
+    image: openjdk:17-jdk-slim
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./user-service:/app
+    working_dir: /app
+    command: ["./gradlew", "bootRun"]
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - "8082:8080"
+    command: ["start-dev"]
